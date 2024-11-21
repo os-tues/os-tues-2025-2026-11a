@@ -31,12 +31,8 @@
 ## Редурси за курса
 
 - Курс в Google Classroom<br>
-  [Линк](https://classroom.google.com/u/4/c/NjI3MjQzNjc1MDA1)
-
-- GitHub хранилище<br>
-  [https://github.com/angel-penchev/os-tues-2023-2024](https://youtu.be/dQw4w9WgXcQ) (oh wait, you're already here 😅)
+  [Линк](https://classroom.google.com/u/4/c/Njg1ODY2MTE4MTM2)
 
 - Контакт
-  - <apenchev@elsys-bg.org>
-  - <angel.penchev.tsb@gmail.com>
-  - [angel@penchev.dev](mailto:angel@penchev.dev)
+  - <ibozhilov@elsys-bg.org>
+  
