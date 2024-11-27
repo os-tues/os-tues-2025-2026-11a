@@ -1,2 +1,0 @@
-echo gosho
-echo $EXAMPLE
