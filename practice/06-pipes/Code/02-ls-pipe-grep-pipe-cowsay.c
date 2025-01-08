@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-int main(int argc, char const *argv[])
+int main()
 {
     int pipefd1[2], pipefd2[2];
     if (pipe(pipefd1) == -1)
@@ -30,7 +30,8 @@ int main(int argc, char const *argv[])
         // ls -la
 
         close(pipefd1[0]);
-        dup2(pipefd1[1], STDOUT_FILENO); // dup2 closes stdout automatically
+        close(STDOUT_FILENO);
+        dup(pipefd1[1]);
         close(pipefd1[1]);
         if (execlp("ls", "ls", "-la", NULL) == -1)
         {
@@ -52,10 +53,14 @@ int main(int argc, char const *argv[])
         // Child - run grep .c
         close(pipefd2[0]);
 
-        dup2(pipefd1[0], STDIN_FILENO);
+        close(STDIN_FILENO);
+        dup(pipefd1[0]);
+
         close(pipefd1[0]);
 
-        dup2(pipefd2[1], STDOUT_FILENO);
+        close(STDOUT_FILENO);
+        dup(pipefd2[1]);
+        
         close(pipefd2[1]);
 
         if (execlp("grep", "grep", ".c", NULL) == -1)
@@ -66,13 +71,15 @@ int main(int argc, char const *argv[])
     }
     // waitpid(pid, NULL, 0);
     close(pipefd2[1]);
-    dup2(pipefd2[0], STDIN_FILENO);
+
+    close(STDIN_FILENO);
+    dup(pipefd2[0]);
+
     close(pipefd2[0]);
-    if (execlp("head", "head", "-n", "2", NULL) == -1)
+    if (execlp("cowsay", "cowsay", NULL) == -1)
     {
-        perror("exec head");
+        perror("exec cowsay");
         return 1;
     }
-
     return 0;
 }

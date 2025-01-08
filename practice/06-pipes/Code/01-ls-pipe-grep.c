@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-int main(int argc, char const *argv[]) {
+int main() {
     int pipefd[2];
     if (pipe(pipefd) == -1) {
         perror("pipe");
@@ -24,16 +24,9 @@ int main(int argc, char const *argv[]) {
         close(pipefd[1]);
 
         waitpid(pid, NULL, 0);
-
-        // eqivalent to dup2 below:
-        //
-        // close(STDIN_FILENO);
-        // dup(pipefd[0]);
-
-
-        dup2(pipefd[0], STDIN_FILENO);
+        close(STDIN_FILENO);
+        dup(pipefd[0]);
         close(pipefd[0]);
-
         if (execlp("grep", "grep", ".c", NULL) == -1) {
             perror("exec grep");
         }
@@ -46,12 +39,8 @@ int main(int argc, char const *argv[]) {
         // close read end of pipe, because it won't be used
         close(pipefd[0]);
 
-        // eqivalent to dup2 below:
-        //
-        // close(STDOUT_FILENO);
-        // dup(pipefd[1]);
-
-        dup2(pipefd[1], STDOUT_FILENO); // dup2 closes stdout automatically
+        close(STDOUT_FILENO);
+        dup(pipefd[1]);
         close(pipefd[1]);
 
         if (execlp("ls", "ls", "-la", NULL) == -1) {
