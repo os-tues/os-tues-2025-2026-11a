@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -pedantic
 
 # Executables with .out extension
-EXECS = 00-introduction.out 01-ls-pipe-grep.out 02-ls-pipe-grep-pipe-cowsay.out
+EXECS = 00-introduction.out 01-ls-pipe-grep.out 02-ls-pipe-grep-pipe-cowsay.out 03-sender.out 03-receiver.out
 
 # Default target
 all: $(EXECS)
@@ -16,6 +16,12 @@ all: $(EXECS)
 	$(CC) $(CFLAGS) -o $@ $<
 
 02-ls-pipe-grep-pipe-cowsay.out: 02-ls-pipe-grep-pipe-cowsay.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+03-sender.out: 03-sender.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+03-receiver.out: 03-receiver.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 # Clean up build artifacts
