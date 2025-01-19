@@ -51,8 +51,8 @@ int read_and_print_file(sem_t *sem_readers, int id) {
         perror("open");
     }
 
-    char out_name[] = "A.txt";
-    out_name[0] = 'A' + id;
+    char out_name[] = "out/A.txt";
+    out_name[4] = 'A' + id;
     int fd_out = open(out_name, O_WRONLY | O_CREAT, 0666);
     if (fd_out == -1)
     {

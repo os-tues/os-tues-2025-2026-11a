@@ -3,6 +3,7 @@
 #include <semaphore.h>
 #include <errno.h>
 #include <stdio.h>
+#include <unistd.h>
 
 int main() {
     sem_t *sem_bobcho = sem_open("bobcho", O_CREAT | O_RDWR, 0664, 10);
@@ -14,6 +15,7 @@ int main() {
         perror("sem_wait");
     };
     // critical section 
+    sleep(10);
     if (sem_post(sem_bobcho) == -1) {
         perror("sem_wait");
         return 1;
