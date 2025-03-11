@@ -15,7 +15,7 @@ int main() {
         perror("sem_wait");
     };
     // critical section 
-    sleep(10);
+    sleep(20);
     if (sem_post(sem_bobcho) == -1) {
         perror("sem_wait");
         return 1;
