@@ -1,41 +1,48 @@
-#include <sys/types.h>          /* See NOTES */
-#include <sys/socket.h>
+// server.c
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/stat.h>
+#include <string.h>
 #include <fcntl.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+
+#define PORT 8181
 
 int main() {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1) {
         perror("socket create");
-        return -1;
+        return 1;
     }
 
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(8181);
-    inet_aton("127.0.0.1", &server_address.sin_addr);
+    server_address.sin_port = htons(PORT);
+    server_address.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(sockfd, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
+    if (bind(sockfd, (struct sockaddr *)&server_address, sizeof(server_address)) == -1) {
         perror("bind");
         return 1;
     }
 
-    if(listen(sockfd, 3) == -1) {
+    if (listen(sockfd, 3) == -1) {
         perror("listen");
         return 1;
     }
 
+    printf("Waiting for a client to connect...\n");
+
     struct sockaddr_in client_address;
-    socklen_t client_address_len;
-    int clientfd = accept(sockfd, (struct sockaddr *) &client_address, &client_address_len);
+    socklen_t client_address_len = sizeof(client_address);
+    int clientfd = accept(sockfd, (struct sockaddr *)&client_address, &client_address_len);
     if (clientfd == -1) {
         perror("accept");
         return 1;
     }
+
+    printf("Client connected. Sending file...\n");
 
     int filefd = open("example.txt", O_RDONLY);
     if (filefd == -1) {
@@ -43,22 +50,19 @@ int main() {
         return 1;
     }
 
-    char buff[10];
-    int read_bytes;
-    while (read_bytes = read(filefd, &buff, 5) > 0)
-    {
-        if (read_bytes == -1) {
-            perror("read");
+    char buffer[1024];
+    ssize_t read_bytes;
+    while ((read_bytes = read(filefd, buffer, sizeof(buffer))) > 0) {
+        ssize_t sent_bytes = write(clientfd, buffer, read_bytes);
+        if (sent_bytes != read_bytes) {
+            perror("write");
             return 1;
         }
-        printf("%d", read_bytes);
+    }
 
-        write(clientfd, &buff, read_bytes);
-    } 
-
-    printf("File sent successfully.");
-
+    close(filefd);
     close(clientfd);
     close(sockfd);
+    printf("File sent successfully.\n");
     return 0;
 }

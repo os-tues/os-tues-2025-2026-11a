@@ -34,17 +34,12 @@ int main() {
         perror("accept");
         return 1;
     }
-    // if (client_address.sin_addr.s_addr == 0b1000000000000000001111111) { // block 127.0.0.1
-    //     printf("block\n");
-    //     close(clientfd);
-    // }
 
     write(clientfd, "aaa", 4);
     char buff[4];
     read(clientfd, &buff, 4);
     puts(buff);
-
-    printf("%ld\n", sizeof(socket));
+    
     close(sockfd);
     return 0;
 }
