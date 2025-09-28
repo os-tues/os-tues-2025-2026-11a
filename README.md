@@ -31,7 +31,7 @@
 ## Редурси за курса
 
 - Курс в Google Classroom<br>
-  [Линк](https://classroom.google.com/u/4/c/Njg1ODY2MTE4MTM2)
+  [Линк](https://classroom.google.com/u/6/c/ODA2NzkxNTI4MzQx)
 
 - Контакт
   - <ibozhilov@elsys-bg.org>
